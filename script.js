@@ -19,6 +19,7 @@
                     return;
                 }
                 else currentNode = currentNode.right;
+                if (currentNode.value == data) return;
             }
             else {
                 if (currentNode.left == null) {
@@ -26,6 +27,7 @@
                     return;
                 }
                 else currentNode = currentNode.left;
+                if (currentNode.value == data) return;
             }
             count ++;
         }
@@ -56,11 +58,32 @@
         }
     }
 
-    function addNode() {
+    function randomNumber (m,n)
+    {
+        m = parseInt(m);
+        n = parseInt(n);
+        return Math.floor( Math.random() * (n - m + 1) ) + m;
+    }
+
+    function addRandNode() {
+        var value = randomNumber(0,1000);
+        myTree.append(value);
+        clearWindow();
+        temp = myTree;
+        flag = myTree.timeToBalance();
+        if (flag <=0.5) myTree.balanceRight();
+        if (flag >=2) myTree.balanceLeft();
+        myTree.showTree(700, 640);
+    }
+
+     function addNode() {
         var value = document.querySelector('input[type = "text"]').value;
         myTree.append(value);
         clearWindow();
-        if (myTree.timeToBalance())  myTree.balanceLeft();
+        temp = myTree;
+        flag = myTree.timeToBalance();
+        if (flag <=0.5) myTree.balanceRight();
+        if (flag >=2) myTree.balanceLeft();
         myTree.showTree(700, 640);
     }
 
@@ -77,7 +100,9 @@
             currentNode = currentNode.left;
             leftDepth++;
         }
-        if(rightDepth/leftDepth>=2) return true;
+        console.log(rightDepth);
+        console.log(leftDepth);
+        return rightDepth/leftDepth;
     }
 
      Node.prototype.balanceLeft = function() {
@@ -92,6 +117,20 @@
         currentNode.right = currentNode.right.right;
         this.update(0);
     }
+
+    Node.prototype.balanceRight = function() {
+        console.log("It's time to balance...");
+        var currentNode = this;
+        var temp = currentNode.right;
+        if (currentNode.left.right) currentNode.right = currentNode.left.right;
+        else currentNode.right = new Node(currentNode.value, 0);
+        currentNode.right.right = temp;
+        currentNode = this;
+        currentNode.value = currentNode.left.value;
+        currentNode.left = currentNode.left.left;
+        this.update(0);
+    }
+
 
       Node.prototype.update = function(count) {
         if( count != 0) {
