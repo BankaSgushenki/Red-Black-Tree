@@ -70,10 +70,10 @@
         myTree.append(value);
         clearWindow();
         temp = myTree;
-        flag = myTree.timeToBalance();
-        if (flag <=0.5) myTree.balanceRight();
-        if (flag >=2) myTree.balanceLeft();
+        myTree.timeToBalance();
         myTree.showTree(700, 640);
+        var container = document.querySelector(".tree");
+        console.log(container.childNodes.length);
     }
 
      function addNode() {
@@ -82,53 +82,58 @@
         clearWindow();
         temp = myTree;
         flag = myTree.timeToBalance();
-        if (flag <=0.5) myTree.balanceRight();
-        if (flag >=2) myTree.balanceLeft();
         myTree.showTree(700, 640);
     }
 
     Node.prototype.timeToBalance = function() {
+
         var currentNode = this;
+        var temp = this;
         var leftDepth = 1;
         var rightDepth = 1;
         while(currentNode.right) {
             currentNode = currentNode.right;
             rightDepth++;
         }
-        currentNode = this;
+        currentNode = temp;
+
         while(currentNode.left) {
-            currentNode = currentNode.left;
             leftDepth++;
+            currentNode = currentNode.left;
         }
-        console.log(rightDepth);
-        console.log(leftDepth);
-        return rightDepth/leftDepth;
+        if (rightDepth - leftDepth > 1) { this.balanceLeft(); }
+        else if (leftDepth - rightDepth > 1) { this.balanceRight(); }
+
+        if (this.right) this.timeToBalance.call(this.right);
+        if (this.left) this.timeToBalance.call(this.left);
     }
 
      Node.prototype.balanceLeft = function() {
         console.log("It's time to balance...");
         var currentNode = this;
         var temp = currentNode.left;
-        if (currentNode.right.left) currentNode.left = currentNode.right.left;
-        else currentNode.left = new Node(currentNode.value, 0);
+        var temp2 = currentNode.right.left;
+        currentNode.left = new Node(currentNode.value, 0);
+        currentNode.left.right = temp2;
         currentNode.left.left = temp;
         currentNode = this;
         currentNode.value = currentNode.right.value;
         currentNode.right = currentNode.right.right;
-        this.update(0);
+        myTree.update(0);
     }
 
     Node.prototype.balanceRight = function() {
         console.log("It's time to balance...");
         var currentNode = this;
         var temp = currentNode.right;
-        if (currentNode.left.right) currentNode.right = currentNode.left.right;
-        else currentNode.right = new Node(currentNode.value, 0);
+        var temp2 = currentNode.left.right;
+        currentNode.right = new Node(currentNode.value, 0);
+        currentNode.right.left = temp2;
         currentNode.right.right = temp;
         currentNode = this;
         currentNode.value = currentNode.left.value;
         currentNode.left = currentNode.left.left;
-        this.update(0);
+        myTree.update(0);
     }
 
 
