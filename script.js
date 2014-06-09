@@ -43,10 +43,10 @@
     printNode = function(node, position) {
         var newNode = document.createElement("div");
         newNode.innerText = node.value;
-        newNode.style.top = node.count*40 + "px";
+        newNode.style.top = node.count*50 + "px";
         newNode.style.left = position + "px";
-        if  (node.color == 0) { newNode.style.background = "black";  newNode.style.color = "white";}
-        else newNode.style.background = "red";
+        if  (node.color == 0) { newNode.style.borderColor = "black";  newNode.style.color = "black";}
+        else newNode.style.borderColor = "red";
         var container = document.querySelector(".tree");
         container.appendChild(newNode);
     }
